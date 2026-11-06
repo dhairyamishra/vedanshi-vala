@@ -1,0 +1,126 @@
+---
+interface Props {
+  project: {
+    slug: string;
+    data: {
+      title: string;
+      description: string;
+      category: string;
+      tags: string[];
+      thumbnail?: string;
+      metric?: string;
+      metricLabel?: string;
+    };
+  };
+  signal?: {
+    role: string;
+    proof: string;
+    filters: string[];
+    featuredLabel?: string;
+    image?: string;
+    imageAlt?: string;
+  };
+  maxTags?: number;
+  showReadMore?: boolean;
+  revealClass?: string;
+  extraClass?: string;
+}
+
+const categoryLabels: Record<string, string> = {
+  'research': 'Research',
+  'ml-ai': 'ML / AI',
+  'full-stack': 'Full-Stack',
+  'devops': 'DevOps',
+  'open-source': 'Open Source',
+  'community-safety': 'Community Safety',
+  'leadership': 'Leadership',
+};
+
+const { project, signal, maxTags = 4, showReadMore = false, revealClass = '', extraClass = '' } = Astro.props;
+const visualSrc = signal?.image ?? project.data.thumbnail;
+const visualAlt = signal?.imageAlt ?? `${project.data.title} project visual`;
+---
+
+<a
+  href={`${import.meta.env.BASE_URL}projects/${project.slug}/`}
+  data-category={project.data.category}
+  data-filters={signal?.filters.join(' ') ?? project.data.category}
+  class={`${revealClass} group card-neon-interactive flex flex-col ${extraClass}`.trim()}
+>
+  {visualSrc ? (
+    <div class="relative -mx-6 -mt-6 mb-5 h-40 overflow-hidden rounded-t-xl border-b border-black/10 bg-base sm:h-44">
+      <img
+        src={visualSrc}
+        alt={visualAlt}
+        class="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none"></div>
+    </div>
+  ) : (
+    <div class="relative -mx-6 -mt-6 mb-5 flex h-40 overflow-hidden rounded-t-xl border-b border-black/10 bg-base sm:h-44">
+      <div class="absolute inset-0 grid-bg opacity-70"></div>
+      <div class="absolute -left-12 -top-16 h-40 w-40 rounded-full bg-neon-rose/15 blur-3xl"></div>
+      <div class="absolute -bottom-20 -right-12 h-44 w-44 rounded-full bg-neon-gold/15 blur-3xl"></div>
+      <div class="relative z-10 flex h-full w-full flex-col justify-end p-5">
+        <p class="text-[10px] font-heading font-semibold uppercase tracking-[0.18em] text-neon-rose">Project brief</p>
+        <p class="mt-2 max-w-[16rem] text-lg font-heading font-semibold leading-tight text-text-bright">{project.data.title}</p>
+      </div>
+    </div>
+  )}
+  <div class="h-1 w-full rounded-t-xl bg-gradient-to-r from-neon-rose via-neon-violet to-neon-gold mb-4 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+
+  <div class="flex items-start justify-between gap-3 mb-3">
+    <div class="flex flex-wrap gap-2">
+      <span class="badge-neon text-[10px]">{categoryLabels[project.data.category] || project.data.category}</span>
+      {signal?.featuredLabel && (
+        <span class="badge-neon-gold text-[10px]">{signal.featuredLabel}</span>
+      )}
+    </div>
+    <div class="flex items-start gap-3">
+      {project.data.metric && (
+        <div class="text-right">
+          <span class="text-lg font-heading font-bold text-neon-rose">{project.data.metric}</span>
+          {project.data.metricLabel && <p class="text-[10px] text-muted">{project.data.metricLabel}</p>}
+        </div>
+      )}
+      {project.data.thumbnail && !visualSrc && (
+        <img
+          src={project.data.thumbnail}
+          alt={`${project.data.title} thumbnail`}
+          class="w-16 h-16 rounded-lg object-cover border border-black/10 flex-shrink-0"
+          loading="lazy"
+        />
+      )}
+    </div>
+  </div>
+
+  <h3 class="text-lg font-heading font-semibold text-text-bright mb-2 group-hover:text-neon-rose transition-colors">
+    {project.data.title}
+  </h3>
+
+  <p class="text-sm text-muted leading-relaxed mb-4 flex-grow">
+    {project.data.description}
+  </p>
+
+  {signal?.role && (
+    <div class="mb-3 rounded-xl border border-black/5 bg-base px-3 py-3">
+      <p class="text-[10px] font-heading font-semibold uppercase tracking-[0.16em] text-neon-rose">Ownership</p>
+      <p class="mt-1 text-sm font-medium text-text">{signal.role}</p>
+      <p class="mt-2 text-xs leading-relaxed text-muted">{signal.proof}</p>
+    </div>
+  )}
+
+  <div class={`flex flex-wrap gap-1.5 mt-auto ${showReadMore ? 'mb-3' : ''}`}>
+    {project.data.tags.slice(0, maxTags).map(tag => (
+      <span class="text-[10px] px-2 py-0.5 rounded-full bg-base text-muted-light border border-black/5">{tag}</span>
+    ))}
+  </div>
+
+  {showReadMore && (
+    <div class="flex items-center text-xs text-neon-rose/60 group-hover:text-neon-rose transition-colors font-mono">
+      Read more
+      <svg class="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+    </div>
+  )}
+</a>

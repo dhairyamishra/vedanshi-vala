@@ -1,0 +1,14 @@
+export interface ProjectSignal {
+  role: string; proof: string; filters: string[]; featuredLabel?: string; image?: string; imageAlt?: string; challenge: string; focus: string; outcome: string;
+}
+export const projectSignals: Record<string, ProjectSignal> = {
+  'bolt-safety': { role: 'Co-Founder, Executive Director & Chairperson', proof: 'Managed 80+ team members, raised $38,000 in grants, and developed partnerships generating 2.2M+ impressions.', filters: ['community-safety', 'leadership'], featuredLabel: 'Community Impact', image: `${import.meta.env.BASE_URL}images/projects/bolt.png`, imageAlt: 'BOLT Safety Society logo', challenge: 'Improve access to resources and safer spaces for communities affected by sexual violence.', focus: 'Nonprofit leadership, partnership development, fundraising, and community advocacy.', outcome: '40,000+ people reached and 63 Safe Hubs across 20 cities.' },
+  'public-health-research': { role: 'Research training and study support', proof: 'Clinical research training in psychiatry, youth-athlete concussion research, and scientific publication experience.', filters: ['research'], featuredLabel: 'Public Health', image: `${import.meta.env.BASE_URL}images/projects/research.png`, imageAlt: 'Icahn School of Medicine at Mount Sinai logo', challenge: 'Contribute to evidence that informs health and injury prevention.', focus: 'Participant coordination, clinical data collection, assessment, database management, and literature synthesis.', outcome: 'Research experience across Mount Sinai, BC Injury Research and Prevention Unit, and the Antarctic Institute of Canada.' },
+  'heritage-fairs': { role: 'Board Director & Provincial Fair Coordinator', proof: 'Spearheaded Canada’s largest Provincial Heritage Fair while serving on a board managing $85,000+ in charitable assets.', filters: ['leadership'], image: `${import.meta.env.BASE_URL}images/projects/heritage.png`, imageAlt: 'BC Heritage Fairs logo', challenge: 'Bring young people together around historical inquiry and community engagement.', focus: 'Board governance, event coordination, stakeholder engagement, and nonprofit operations.', outcome: 'Recognition and support from national, provincial, and local leaders.' },
+};
+export const projectFilterOptions = [{ id: 'all', label: 'All' }, { id: 'community-safety', label: 'Community Safety' }, { id: 'research', label: 'Research' }, { id: 'leadership', label: 'Leadership' }];
+export const projectViews = [
+  { label: 'Community safety', description: 'Nonprofit initiatives and partnerships advancing safer, more equitable communities.', filters: ['community-safety'] },
+  { label: 'Public health research', description: 'Clinical research, injury prevention, and scientific publications.', filters: ['research'] },
+  { label: 'Community leadership', description: 'Board service, youth engagement, and nonprofit program coordination.', filters: ['leadership'] },
+];

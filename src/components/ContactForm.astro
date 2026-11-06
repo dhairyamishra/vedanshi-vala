@@ -1,0 +1,20 @@
+---
+const inputClasses = "w-full px-4 py-3 rounded-lg bg-[#FFFFFF] border border-black/10 text-[#241A14] placeholder-[#8B7D6E] focus:outline-none focus:border-[#A63A3D]/40 focus:shadow-[0_10px_24px_rgba(36,26,20,0.08)] transition-all duration-300 text-sm";
+---
+<form id="contact-form" class="space-y-5">
+<div><label for="name" class="block text-xs font-medium text-[#6F6254] uppercase tracking-wider mb-2">Name</label><input id="name" name="name" type="text" required placeholder="Your name" autocomplete="name" class={inputClasses} /></div>
+<div><label for="email" class="block text-xs font-medium text-[#6F6254] uppercase tracking-wider mb-2">Email</label><input id="email" name="email" type="email" required placeholder="your@email.com" autocomplete="email" class={inputClasses} /></div>
+<div><label for="message" class="block text-xs font-medium text-[#6F6254] uppercase tracking-wider mb-2">Message</label><textarea id="message" name="message" required rows={5} placeholder="Tell me about your project or idea..." class={`${inputClasses} resize-none`}></textarea></div>
+<button type="submit" class="w-full px-6 py-3 rounded-lg font-medium text-sm tracking-wide bg-[#A63A3D] border border-[#A63A3D] text-[#FFFFFF] hover:bg-[#7F2F33] hover:border-[#7F2F33] hover:shadow-[0_14px_32px_rgba(36,26,20,0.12)] transition-all duration-300 active:scale-[0.98]">Open email draft</button>
+<p class="text-xs text-muted">Opens your email app. Review and send your message there, or email <a class="underline underline-offset-4" href="mailto:vedanshi.vala@icahn.mssm.edu">vedanshi.vala@icahn.mssm.edu</a> directly.</p>
+</form>
+<script>
+ document.querySelector<HTMLFormElement>('#contact-form')?.addEventListener('submit', event => {
+  event.preventDefault(); const form = event.currentTarget as HTMLFormElement;
+  if (!form.reportValidity()) return;
+  const values = new FormData(form);
+  const subject = `Portfolio enquiry from ${values.get('name')}`;
+  const body = `${values.get('message')}\n\nFrom: ${values.get('name')}\nEmail: ${values.get('email')}`;
+  window.location.href = `mailto:vedanshi.vala@icahn.mssm.edu?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+ });
+</script>

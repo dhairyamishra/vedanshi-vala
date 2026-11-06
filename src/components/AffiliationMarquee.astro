@@ -1,39 +1,211 @@
 ---
-import OrganizationBadge from './OrganizationBadge.astro';
-const names = ['BOLT Safety Society', 'Concordia', 'BC Heritage Fairs Society', 'St. John Ambulance', 'Berner Lab · Icahn School of Medicine at Mount Sinai', 'BC Injury Research and Prevention Unit', 'Antarctic Institute of Canada', 'Ye Research Group · Stewart Blusson Quantum Matter Institute', 'University of British Columbia'];
+import { Icon } from 'astro-icon/components';
+
+interface Affiliation {
+  name: string;
+  detail: string;
+  image?: string;
+  imageAlt?: string;
+  imageClass?: string;
+  imageWrapClass?: string;
+  icon?: string;
+  iconClass?: string;
+}
+
+const experienceAffiliations: Affiliation[] = [
+  {
+    "name": "BOLT Safety Society",
+    "detail": "Nonprofit leadership",
+    "image": "images/organizations/bolt.jpg",
+    "imageAlt": "BOLT Safety Society",
+    "imageClass": "h-8 w-20 object-contain"
+  },
+  {
+    "name": "Concordia",
+    "detail": "Events & CRM systems"
+  },
+  {
+    "name": "BC Heritage Fairs",
+    "detail": "Board & provincial fair",
+    "image": "images/organizations/heritage.png",
+    "imageAlt": "BC Heritage Fairs",
+    "imageClass": "h-8 w-20 object-contain"
+  },
+  {
+    "name": "St. John Ambulance",
+    "detail": "First aid & youth leadership",
+    "image": "images/organizations/st-john.svg",
+    "imageAlt": "St. John Ambulance",
+    "imageClass": "h-8 w-20 object-contain"
+  },
+  {
+    "name": "Icahn School of Medicine",
+    "detail": "MPH · Global Health",
+    "image": "images/organizations/icahn.png",
+    "imageAlt": "Icahn School of Medicine",
+    "imageClass": "h-8 w-20 object-contain"
+  }
+];
+
+const researchAffiliations: Affiliation[] = [
+  {
+    "name": "Berner Lab",
+    "detail": "Clinical research training",
+    "image": "images/organizations/icahn.png",
+    "imageAlt": "Berner Lab",
+    "imageClass": "h-8 w-20 object-contain"
+  },
+  {
+    "name": "BC Injury Research",
+    "detail": "SHRed Concussions Study",
+    "image": "images/organizations/injury.png",
+    "imageAlt": "BC Injury Research",
+    "imageClass": "h-8 w-20 object-contain"
+  },
+  {
+    "name": "Antarctic Institute",
+    "detail": "Research & publications",
+    "image": "images/organizations/antarctic.jpg",
+    "imageAlt": "Antarctic Institute",
+    "imageClass": "h-8 w-20 object-contain"
+  },
+  {
+    "name": "UBC · QMI",
+    "detail": "Nanomaterials research"
+  },
+  {
+    "name": "UBC",
+    "detail": "Integrated Sciences"
+  }
+];
+
+const rows = [
+  { items: experienceAffiliations, direction: 'right' },
+  { items: researchAffiliations, direction: 'left' },
+];
 ---
-<aside class="affiliations" aria-labelledby="affiliations-heading">
-  <div class="affiliations-header">
-    <div><p class="text-xs font-heading font-semibold uppercase tracking-[0.18em] text-neon-rose">Experience, research & education</p><h2 id="affiliations-heading" class="mt-2 text-lg font-heading font-semibold text-text-bright">Communities and organizations I’ve worked with</h2></div>
-    <button type="button" class="motion-control" aria-pressed="false" hidden>Pause scrolling</button>
+
+<aside class="affiliation-panel" aria-labelledby="affiliation-heading">
+  <div class="flex items-end justify-between gap-5 px-5 pt-5">
+    <div>
+      <p class="text-[10px] font-heading font-semibold uppercase tracking-[0.18em] text-neon-rose">
+        Experience, education & research
+      </p>
+      <h2 id="affiliation-heading" class="mt-2 text-base font-heading font-semibold text-text-bright">
+        Built across community leadership, public health, and research.
+      </h2>
+    </div>
   </div>
-  <div class="affiliations-window"><div class="affiliations-track">
-    {[false, true].map((duplicate) => <div class="affiliations-set" aria-hidden={duplicate ? 'true' : undefined}>{names.map((name) => <OrganizationBadge name={name} />)}</div>)}
-  </div></div>
+
+  <div class="mt-4 space-y-2.5 pb-5">
+    {rows.map((row) => (
+      <div class="affiliation-viewport">
+        <div class={`affiliation-track affiliation-track-${row.direction}`}>
+          {[false, true].map((duplicate) => (
+            <div class="affiliation-set" aria-hidden={duplicate ? 'true' : undefined}>
+              {row.items.map((item) => (
+                <div class="affiliation-pill">
+                  {item.image && (
+                    <span class={`flex flex-none items-center justify-center ${item.imageWrapClass ?? ''}`}>
+                      <img
+                        src={`${import.meta.env.BASE_URL}${item.image}`}
+                        alt={duplicate ? '' : item.imageAlt ?? ''}
+                        class={item.imageClass}
+                        loading="eager"
+                        decoding="async"
+                      />
+                    </span>
+                  )}
+                  {item.icon && <Icon name={item.icon} class={item.iconClass} aria-hidden="true" />}
+                  <span class="whitespace-nowrap">
+                    <span class="block text-xs font-heading font-semibold leading-none text-text-bright">{item.name}</span>
+                    <span class="mt-1 block text-[10px] leading-none text-muted">{item.detail}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
 </aside>
-<script>
-  document.querySelectorAll<HTMLElement>('.affiliations').forEach((panel) => {
-    const button = panel.querySelector<HTMLButtonElement>('.motion-control');
-    if (!button) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => { button.hidden = reduce.matches; };
-    sync(); reduce.addEventListener('change', sync);
-    button.addEventListener('click', () => {
-      const paused = panel.classList.toggle('is-paused');
-      button.setAttribute('aria-pressed', String(paused));
-      button.textContent = paused ? 'Resume scrolling' : 'Pause scrolling';
-    });
-  });
-</script>
+
 <style>
-  .affiliations { overflow: hidden; border: 1px solid rgb(36 26 20 / .1); border-radius: 1rem; background: rgb(255 255 255 / .72); padding: 1.25rem 0; }
-  .affiliations-header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; padding:0 1.25rem 1rem; }
-  .motion-control { color:#7f2f33; font-size:.8rem; font-weight:600; text-decoration:underline; text-underline-offset:3px; }
-  .affiliations-window { overflow:hidden; }
-  .affiliations-track { display:flex; width:max-content; animation: slide 48s linear infinite; }
-  .affiliations-set { display:flex; flex:none; align-items:stretch; gap:.625rem; padding-right:.625rem; }
-  .affiliations-set > :global(span) { white-space:nowrap; }
-  .is-paused .affiliations-track { animation-play-state:paused; }
-  @keyframes slide { to { transform:translateX(-50%); } }
-  @media (prefers-reduced-motion:reduce) { .affiliations-window { overflow:visible; } .affiliations-track { display:block; width:auto; animation:none; } .affiliations-set { flex-wrap:wrap; padding:0 1rem; } .affiliations-set[aria-hidden='true'] { display:none; } .affiliations-set > :global(span) { white-space:normal; } }
+  .affiliation-panel {
+    overflow: hidden;
+    border: 1px solid rgb(36 26 20 / 0.1);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.72);
+    box-shadow: 0 18px 40px rgb(36 26 20 / 0.07);
+    backdrop-filter: blur(12px);
+  }
+
+  .affiliation-viewport {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .affiliation-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation-duration: 34s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .affiliation-track-left {
+    animation-name: affiliation-scroll-left;
+  }
+
+  .affiliation-track-right {
+    animation-name: affiliation-scroll-right;
+  }
+
+  .affiliation-set {
+    display: flex;
+    flex: none;
+    gap: 0.625rem;
+    padding-right: 0.625rem;
+  }
+
+  .affiliation-pill {
+    display: flex;
+    min-height: 3.25rem;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid rgb(36 26 20 / 0.08);
+    border-radius: 0.75rem;
+    background: rgb(255 255 255 / 0.9);
+    padding: 0.55rem 0.8rem;
+    box-shadow: 0 8px 18px rgb(36 26 20 / 0.05);
+  }
+
+  .affiliation-panel:hover .affiliation-track,
+  .affiliation-panel:focus-within .affiliation-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes affiliation-scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes affiliation-scroll-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .affiliation-track {
+      animation: none;
+      transform: none;
+    }
+
+    .affiliation-set[aria-hidden='true'] {
+      display: none;
+    }
+  }
 </style>

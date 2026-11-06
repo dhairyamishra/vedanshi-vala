@@ -1,0 +1,80 @@
+---
+interface Props {
+  brand: string;
+  size?: 'sm' | 'md';
+}
+
+interface BrandAsset {
+  label: string;
+  src?: string;
+  text?: string;
+  imageClass?: string;
+  backgroundClass?: string;
+}
+
+const { brand, size = 'md' } = Astro.props;
+
+const assets: Record<string, BrandAsset> = {
+  "bolt": {
+    "label": "BOLT Safety Society",
+    "src": "bolt.jpg",
+    "imageClass": "h-9 w-9"
+  },
+  "concordia": {
+    "label": "Concordia",
+    "text": "Concordia"
+  },
+  "heritage": {
+    "label": "BC Heritage Fairs",
+    "src": "heritage.png",
+    "imageClass": "h-9 w-20"
+  },
+  "stjohn": {
+    "label": "St. John Ambulance",
+    "src": "st-john.svg",
+    "imageClass": "h-8 w-20"
+  },
+  "icahn": {
+    "label": "Icahn School of Medicine",
+    "src": "icahn.png",
+    "imageClass": "h-9 w-20"
+  },
+  "injury": {
+    "label": "BC Injury Research",
+    "src": "injury.png",
+    "imageClass": "h-9 w-20"
+  },
+  "antarctic": {
+    "label": "Antarctic Institute of Canada",
+    "src": "antarctic.jpg",
+    "imageClass": "h-9 w-20"
+  },
+  "qmi": {
+    "label": "UBC Quantum Matter Institute",
+    "text": "UBC · QMI"
+  },
+  "ubc": {
+    "label": "University of British Columbia",
+    "text": "UBC"
+  }
+};
+
+const asset = assets[brand];
+const sizeClass = size === 'sm' ? 'h-11 w-24' : 'h-12 w-28';
+const surfaceClass = asset?.backgroundClass ?? 'border-black/10 bg-surface';
+---
+
+{asset && (
+  <span
+    class={`inline-flex ${sizeClass} flex-none items-center justify-center rounded-xl border px-2 shadow-neon-sm ${surfaceClass}`}
+    aria-label={asset.label}
+  >
+    {asset.src ? <img
+      src={`${import.meta.env.BASE_URL}images/organizations/${asset.src}`}
+      alt={asset.label}
+      class={`${asset.imageClass} object-contain`}
+      loading="lazy"
+      decoding="async"
+    /> : <span class="text-xs font-heading font-semibold text-neon-rose text-center">{asset.text}</span>}
+  </span>
+)}

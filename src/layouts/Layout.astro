@@ -5,7 +5,8 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogImageAlt?: string;
-  ogType?: 'website' | 'profile';
+  publishedTime?: string;
+  ogType?: 'website' | 'profile' | 'article';
 }
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const {

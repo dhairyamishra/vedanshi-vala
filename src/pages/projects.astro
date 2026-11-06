@@ -1,0 +1,118 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projectFilterOptions, projectSignals, projectViews } from '../data/projectSignals';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+type ProjectEntry = CollectionEntry<'projects'>;
+
+const allProjects = await getCollection('projects');
+const projects = allProjects.sort(
+  (a: ProjectEntry, b: ProjectEntry) => b.data.date.localeCompare(a.data.date)
+);
+---
+
+<Layout title="Projects - Vedanshi Vala" description="Community safety, research, advocacy, and leadership initiatives.">
+  <Navigation />
+
+  <main id="main-content" class="py-20 md:py-28">
+    <section class="section-container">
+      <div class="mb-14">
+        <p class="mb-4 font-mono text-sm uppercase tracking-widest text-neon-rose animate-fade-in">Portfolio</p>
+        <h1 class="mb-4 text-4xl font-heading font-bold md:text-5xl">
+          <span class="text-gradient-neon">Projects</span>
+        </h1>
+        <p class="max-w-3xl text-lg text-muted-light">
+          Selected work in community safety, public health research, and nonprofit leadership, with the role and outcomes behind each initiative.
+        </p>
+      </div>
+
+      <div class="mb-10 grid gap-4 lg:grid-cols-3">
+        {projectViews.map((view, index) => (
+          <button
+            data-view={view.filters.join(' ')}
+            class={`project-view reveal reveal-delay-${index + 1} card-neon-interactive p-4 text-left`}
+          >
+            <p class="text-xs font-heading font-semibold uppercase tracking-[0.16em] text-neon-rose">{view.label}</p>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{view.description}</p>
+          </button>
+        ))}
+      </div>
+
+      <div class="mb-10 flex flex-wrap gap-2" id="filter-bar">
+        {projectFilterOptions.map((filter) => (
+          <button
+            data-filter={filter.id}
+            class={`filter-btn rounded-full border px-4 py-2 text-xs font-heading font-medium tracking-wide transition-all duration-200 ${
+              filter.id === 'all'
+                ? 'border-neon-rose/25 bg-neon-rose/10 text-neon-rose'
+                : 'border-black/10 bg-surface text-muted hover:border-neon-gold/30 hover:text-text'
+            }`}
+          >
+            {filter.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" id="project-grid">
+        {projects.map((project: ProjectEntry, i: number) => (
+          <ProjectCard
+            project={project}
+            signal={projectSignals[project.slug]}
+            maxTags={5}
+            showReadMore
+            revealClass={`reveal reveal-delay-${(i % 5) + 1}`}
+            extraClass="project-card"
+          />
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const viewButtons = document.querySelectorAll('.project-view');
+  const cards = document.querySelectorAll('.project-card');
+
+  const applyFilter = (filter: string | null) => {
+    const activeFilter = filter ?? 'all';
+    cards.forEach(card => {
+      const filters = (card.getAttribute('data-filters') || '').split(' ').filter(Boolean);
+      if (activeFilter === 'all' || filters.includes(activeFilter)) {
+        (card as HTMLElement).style.display = '';
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+  };
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      buttons.forEach(b => {
+        b.classList.remove('bg-neon-rose/10', 'text-neon-rose', 'border-neon-rose/25');
+        b.classList.add('bg-surface', 'text-muted', 'border-black/10');
+      });
+
+      btn.classList.remove('bg-surface', 'text-muted', 'border-black/10');
+      btn.classList.add('bg-neon-rose/10', 'text-neon-rose', 'border-neon-rose/25');
+
+      applyFilter(filter);
+    });
+  });
+
+  viewButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filters = (btn.getAttribute('data-view') || '').split(' ').filter(Boolean);
+      const primaryFilter = filters[0] || 'all';
+      const primaryButton = document.querySelector(`[data-filter="${primaryFilter}"]`);
+      (primaryButton as HTMLButtonElement | null)?.click();
+    });
+  });
+</script>

@@ -1,0 +1,164 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import MediaLightbox from '../../components/MediaLightbox.astro';
+import { projectSignals } from '../../data/projectSignals';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+type ProjectEntry = CollectionEntry<'projects'>;
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project: ProjectEntry) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+type Props = { project: ProjectEntry };
+
+const { project } = Astro.props as Props;
+const { Content } = await project.render();
+const signal = projectSignals[project.slug];
+
+const allProjects = await getCollection('projects');
+const related = allProjects
+  .filter((p: ProjectEntry) => p.slug !== project.slug && p.data.category === project.data.category)
+  .slice(0, 2);
+
+const categoryLabels: Record<string, string> = {
+  'research': 'Research',
+  'ml-ai': 'ML / AI',
+  'full-stack': 'Full-Stack',
+  'devops': 'DevOps',
+  'open-source': 'Open Source',
+  'community-safety': 'Community Safety',
+  'leadership': 'Leadership',
+};
+
+const rawDate = project.data.date;
+const publishedTime = /^\d{4}-\d{2}$/.test(rawDate) ? `${rawDate}-01` : rawDate;
+---
+
+<Layout
+  title={`${project.data.title} — Vedanshi Vala`}
+  description={project.data.description}
+  ogType="article"
+  publishedTime={publishedTime}
+>
+  <Navigation />
+
+  <main id="main-content" class="py-20 md:py-28">
+    <article class="section-container">
+      <a href={`${import.meta.env.BASE_URL}projects/`} class="mb-8 inline-flex items-center font-mono text-sm text-muted transition-colors hover:text-neon-rose">
+        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+        Back to Projects
+      </a>
+
+      <header class="mb-14 max-w-5xl">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <span class="badge-neon">{categoryLabels[project.data.category] || project.data.category}</span>
+          <span class="text-xs font-mono text-muted">{project.data.date}</span>
+          {signal?.featuredLabel && <span class="badge-neon-gold">{signal.featuredLabel}</span>}
+        </div>
+
+        <h1 class="mb-4 text-3xl font-heading font-bold text-text-bright md:text-4xl lg:text-5xl">
+          {project.data.title}
+        </h1>
+
+        <p class="mb-6 text-lg leading-relaxed text-muted-light">
+          {project.data.description}
+        </p>
+
+        {project.data.metric && (
+          <div class="project-metric-card mb-8 inline-flex flex-col rounded-2xl border border-neon-gold/20 bg-neon-gold/5 px-5 py-4">
+            {project.data.metricLabel && <span class="text-[10px] font-heading uppercase tracking-[0.18em] text-muted">{project.data.metricLabel}</span>}
+            <span class="mt-1 text-3xl font-heading font-bold leading-none text-neon-rose md:text-4xl">{project.data.metric}</span>
+          </div>
+        )}
+
+        <div class="flex flex-wrap gap-3">
+          {project.data.github && (
+            <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="btn-neon text-sm inline-flex items-center gap-2">
+              <Icon name="simple-icons:github" class="h-4 w-4" aria-hidden="true" />
+              GitHub
+            </a>
+          )}
+          {project.data.liveUrl && (
+            <a href={project.data.liveUrl} target="_blank" rel="noopener noreferrer" class="btn-neon-fill text-sm inline-flex items-center gap-2">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+              Visit organization
+            </a>
+          )}
+          {project.data.paperUrl && (
+            <a href={project.data.paperUrl} target="_blank" rel="noopener noreferrer" class="btn-neon-gold text-sm inline-flex items-center gap-2">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
+              Paper
+            </a>
+          )}
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          {project.data.tags.map((tag: string) => (
+            <span class="badge-neon text-[10px]">{tag}</span>
+          ))}
+        </div>
+      </header>
+
+      {signal && (
+        <section class="mb-12 grid gap-4 lg:grid-cols-4">
+          <div class="card-neon lg:col-span-2">
+            <p class="text-[10px] font-heading font-semibold uppercase tracking-[0.16em] text-neon-rose">What this project proves</p>
+            <h2 class="mt-2 text-xl font-heading font-semibold text-text-bright">{signal.role}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{signal.proof}</p>
+          </div>
+          <div class="card-neon">
+            <p class="text-[10px] font-heading font-semibold uppercase tracking-[0.16em] text-neon-rose">Core challenge</p>
+            <p class="mt-2 text-sm leading-relaxed text-text">{signal.challenge}</p>
+          </div>
+          <div class="card-neon">
+            <p class="text-[10px] font-heading font-semibold uppercase tracking-[0.16em] text-neon-rose">Evaluation lens</p>
+            <p class="mt-2 text-sm leading-relaxed text-text">{signal.focus}</p>
+            <p class="mt-4 text-xs leading-relaxed text-muted">{signal.outcome}</p>
+          </div>
+        </section>
+      )}
+
+      <div class="divider-neon mb-12"></div>
+
+      <div class="project-article-shell max-w-4xl prose-neon">
+        <Content />
+      </div>
+
+      <MediaLightbox />
+
+      {related.length > 0 && (
+        <div class="mt-20">
+          <div class="divider-neon-animated mb-12"></div>
+          <h2 class="mb-8 text-center text-2xl font-heading font-bold">
+            Related <span class="text-gradient-rose">Projects</span>
+          </h2>
+          <div class="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+            {related.map((rel: ProjectEntry) => (
+              <a href={`${import.meta.env.BASE_URL}projects/${rel.slug}/`} class="group card-neon-interactive flex flex-col">
+                <div class="mb-3 h-1 w-full rounded-t-xl bg-gradient-to-r from-neon-rose via-neon-violet to-neon-gold opacity-40 transition-opacity group-hover:opacity-100"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="badge-neon text-[10px] w-fit">{categoryLabels[rel.data.category] || rel.data.category}</span>
+                  {projectSignals[rel.slug]?.featuredLabel && (
+                    <span class="badge-neon-gold text-[10px]">{projectSignals[rel.slug].featuredLabel}</span>
+                  )}
+                </div>
+                <h3 class="mb-1 mt-3 text-base font-heading font-semibold text-text-bright transition-colors group-hover:text-neon-rose">{rel.data.title}</h3>
+                <p class="text-xs leading-relaxed text-muted">{projectSignals[rel.slug]?.role ?? rel.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </article>
+  </main>
+
+  <Footer />
+</Layout>

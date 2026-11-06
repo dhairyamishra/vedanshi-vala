@@ -4,9 +4,9 @@ A simple, responsive portfolio for Vedanshi Vala, featuring public health leader
 
 **Website:** https://dhairyamishra.github.io/vedanshi-vala/
 
-Adapted from [Dhairya Mishra's Astro portfolio](https://github.com/dhairyamishra/dhairyamishra.github.io), source commit `1598923922a1c91a32a531ac26a5e6b8fecadb1d`. Retains the template's typography, warm colour palette, navigation, cards, and layout patterns.
+Uses the original four-page structure and components from [Dhairya Mishra's Astro portfolio](https://github.com/dhairyamishra/dhairyamishra.github.io), source commit `1598923922a1c91a32a531ac26a5e6b8fecadb1d`. Retains the template's typography, warm colour palette, navigation, cards, and layout patterns.
 
-Content is based on the supplied April 23, 2026 resume. Education in progress is labelled with its expected completion date. The first draft uses email and LinkedIn contact links, with no form backend or analytics.
+Content is based on the supplied April 23, 2026 resume. Education in progress is labelled with its expected completion date. Contact fields open a draft in the visitor’s email app. No third-party form backend or analytics is configured.
 
 ## Develop
 
@@ -24,7 +24,7 @@ npm run check
 npm run build
 ```
 
-Edit `src/pages/index.astro` for portfolio content and `src/components/` for navigation and contact links. Theme styles are in `src/styles/global.css` and `tailwind.config.js`.
+Edit `src/data/home.ts`, `src/data/resume.ts`, and `src/content/projects/` for portfolio content, and `src/components/` for navigation and contact links. Theme styles are in `src/styles/global.css` and `tailwind.config.js`.
 
 ## Deploy
 

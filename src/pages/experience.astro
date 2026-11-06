@@ -1,0 +1,142 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import VerifiedBrandBadge from '../components/VerifiedBrandBadge.astro';
+import EducationCards from '../components/EducationCards.astro';
+
+import { experience, research, skills } from '../data/resume';
+import { caseStudies } from '../data/home';
+const proof = [
+ {value:'40,000+',label:'people reached',context:'Community safety resources and initiatives'},
+ {value:'63',label:'Safe Hubs',context:'Across 20 cities'},
+ {value:'80+',label:'team members managed',context:'Nonprofit leadership and operations'},
+ {value:'$38,000',label:'grant funding raised',context:'Supporting community safety programs'},
+];
+const problems = caseStudies.map(item => ({number:item.number,title:item.title,detail:item.ownership,proof:item.result}));
+const brands: Record<string,string> = {'BOLT Safety Society':'bolt','Concordia':'concordia','BC Heritage Fairs Society':'heritage','St. John Ambulance':'stjohn','Berner Lab · Icahn School of Medicine at Mount Sinai':'icahn','BC Injury Research and Prevention Unit':'injury','Antarctic Institute of Canada':'antarctic','Ye Research Group · Stewart Blusson Quantum Matter Institute':'qmi'};
+const entries = [...experience, ...research.map(item => ({...item,location:''}))];
+
+---
+
+<Layout
+  title="Experience - Vedanshi Vala"
+  description="Vedanshi Vala’s experience in nonprofit leadership, public health research, and community safety."
+>
+  <Navigation />
+
+  <main id="main-content">
+    <section class="border-b border-black/5 py-20 md:py-28">
+      <div class="section-container">
+        <div class="max-w-4xl reveal">
+          <p class="mb-5 font-mono text-xs uppercase tracking-[0.24em] text-neon-rose">Experience</p>
+          <h1 class="max-w-4xl text-4xl font-heading font-bold leading-[1.08] text-text-bright md:text-6xl">
+            I lead public health initiatives that advance safety and equity.
+          </h1>
+          <p class="mt-6 max-w-3xl text-lg leading-relaxed text-muted md:text-xl">
+            Nine-plus years of executive leadership, alongside experience in community programs, international events, emergency response, and research.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#work" class="btn-primary">See the evidence</a>
+            <a href={`${import.meta.env.BASE_URL}contact/`} class="btn-secondary">Discuss a problem</a>
+          </div>
+        </div>
+
+        <div class="mt-14 grid overflow-hidden rounded-2xl border border-black/5 bg-surface shadow-neon-sm sm:grid-cols-2 lg:grid-cols-4">
+          {proof.map((item, index) => (
+            <div class={`reveal reveal-delay-${index + 1} p-6 lg:border-r lg:border-black/5 lg:last:border-r-0`}>
+              <p class="text-3xl font-heading font-bold text-gradient-rose">{item.value}</p>
+              <p class="mt-1 font-heading font-semibold text-text-bright">{item.label}</p>
+              <p class="mt-2 text-xs leading-relaxed text-muted">{item.context}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 md:py-24">
+      <div class="section-container">
+        <div class="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+          <div class="reveal">
+            <p class="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-neon-rose">Where I help</p>
+            <h2 class="text-3xl font-heading font-bold text-text-bright md:text-4xl">Initiatives I know how to move forward.</h2>
+            <p class="mt-4 max-w-md leading-relaxed text-muted">
+              I bring strategy, partnerships, and research together to respond to community needs and build sustainable programs.
+            </p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            {problems.map((item, index) => (
+              <article class={`reveal reveal-delay-${(index % 4) + 1} card-neon`}>
+                <p class="font-mono text-xs text-neon-rose">{item.number}</p>
+                <h3 class="mt-4 text-lg font-heading font-semibold leading-snug text-text-bright">{item.title}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-muted">{item.detail}</p>
+                <p class="mt-5 border-t border-black/5 pt-4 text-xs font-medium leading-relaxed text-neon-rose">{item.proof}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="border-y border-black/5 bg-surface/40 py-20 md:py-24">
+      <div class="section-container">
+        <div class="mb-12 max-w-3xl reveal">
+          <p class="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-neon-rose">Selected experience</p>
+          <h2 class="text-3xl font-heading font-bold text-text-bright md:text-4xl">The organizations, the work, and the contribution.</h2>
+          <p class="mt-4 leading-relaxed text-muted">Professional experience and research appointments, grounded in the responsibilities behind each role.</p>
+        </div>
+
+        <div class="space-y-6">
+          {entries.map(item => (
+            <article class="reveal rounded-2xl border border-black/5 bg-surface p-6 shadow-neon-sm md:p-8">
+              <div class="flex flex-col gap-5 border-b border-black/5 pb-7 sm:flex-row sm:items-center">
+                <VerifiedBrandBadge brand={brands[item.organization]} />
+                <div class="min-w-0 flex-1">
+                  <p class="text-xs font-mono uppercase tracking-[0.16em] text-neon-rose">{item.date}</p>
+                  <h3 class="mt-2 text-2xl font-heading font-semibold text-text-bright">{item.role}</h3>
+                  <p class="mt-1 text-sm text-muted">{item.organization}{item.location && ` · ${item.location}`}</p>
+                </div>
+              </div>
+              <p class="mt-7 max-w-4xl text-sm leading-relaxed text-text">{item.detail}</p>
+            </article>
+          ))}
+        </div>
+
+        <details class="reveal mt-6 rounded-2xl border border-black/5 bg-surface px-6 py-5 shadow-neon-sm">
+          <summary class="cursor-pointer font-heading font-semibold text-text-bright">Skills & languages</summary>
+          <p class="mt-4 max-w-4xl text-sm leading-relaxed text-muted">
+            {skills.map(item => item.detail).join(' ')} English, French, Hindi, and Gujarati.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="py-20 md:py-24">
+      <div class="section-container">
+        <div class="mb-10 text-center reveal">
+          <p class="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-neon-rose">Education</p>
+          <h2 class="text-3xl font-heading font-bold text-text-bright md:text-4xl">Academic background</h2>
+        </div>
+        <EducationCards compact={true} />
+      </div>
+    </section>
+
+    <section class="border-t border-black/5 py-20">
+      <div class="section-container">
+        <div class="reveal rounded-2xl border border-black/5 bg-surface p-8 shadow-neon-sm md:flex md:items-center md:justify-between md:gap-10 md:p-10">
+          <div class="max-w-2xl">
+            <p class="font-mono text-xs uppercase tracking-[0.2em] text-neon-rose">Working toward safer communities?</p>
+            <h2 class="mt-3 text-2xl font-heading font-bold text-text-bright md:text-3xl">Let’s connect about public health, research, and community partnerships.</h2>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-3 md:mt-0 md:flex-none">
+            <a href={`${import.meta.env.BASE_URL}projects/`} class="btn-secondary">See selected work</a>
+            <a href={`${import.meta.env.BASE_URL}contact/`} class="btn-primary">Get in touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

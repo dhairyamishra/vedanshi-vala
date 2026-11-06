@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<Layout title="Contact - Vedanshi Vala" description="Get in touch about public health, research, community safety, or partnerships.">
+  <Navigation />
+
+  <main id="main-content" class="py-20 md:py-28">
+    <div class="section-container">
+      <div class="mx-auto grid max-w-5xl gap-12 lg:grid-cols-5">
+        <div class="lg:col-span-2">
+          <p class="mb-4 font-mono text-sm uppercase tracking-widest text-neon-rose animate-fade-in">Contact</p>
+          <h1 class="mb-6 text-4xl font-heading font-bold md:text-5xl">
+            <span class="text-gradient-neon">Discuss the work</span>
+          </h1>
+          <p class="mb-8 leading-relaxed text-muted-light">
+            Reach out about public health, research, community safety, advocacy, or partnerships that advance safer and more equitable communities.
+          </p>
+
+          <div class="mb-8 space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-neon-rose/20 bg-neon-rose/10">
+                <svg class="h-5 w-5 text-neon-rose" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-text-bright">Email</p>
+                <a class="text-xs text-muted break-all hover:text-neon-rose" href="mailto:vedanshi.vala@icahn.mssm.edu">vedanshi.vala@icahn.mssm.edu</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider-neon mb-6"></div>
+
+          <p class="mb-3 text-xs font-heading uppercase tracking-wider text-muted">Other channels</p>
+          <SocialLinks variant="icon-only-boxed" />
+        </div>
+
+        <div class="lg:col-span-3">
+          <div class="card-neon">
+            <ContactForm />
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

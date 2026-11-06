@@ -144,7 +144,7 @@
   }
 
   .link-neon {
-    @apply text-neon-rose hover:text-neon-violet;
+    @apply text-neon-rose/80 hover:text-neon-rose;
     @apply underline decoration-neon-rose/25 underline-offset-4;
     @apply hover:decoration-neon-rose/70;
     @apply transition-all duration-200;
