@@ -1,0 +1,10 @@
+---
+import { organizations } from '../data/organizations';
+interface Props { name: string; }
+const { name } = Astro.props;
+const organization = organizations[name];
+---
+{organization && <span class="inline-flex min-h-12 max-w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-neon-sm">
+  {organization.image && <img src={`${import.meta.env.BASE_URL}images/organizations/${organization.image}`} alt="" width="80" height="44" class="h-9 w-16 shrink-0 object-contain" loading="lazy" decoding="async" />}
+  <span class="text-xs font-heading font-semibold leading-snug text-text-bright">{organization.short}</span>
+</span>}

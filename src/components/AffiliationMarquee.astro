@@ -1,0 +1,39 @@
+---
+import OrganizationBadge from './OrganizationBadge.astro';
+const names = ['BOLT Safety Society', 'Concordia', 'BC Heritage Fairs Society', 'St. John Ambulance', 'Berner Lab · Icahn School of Medicine at Mount Sinai', 'BC Injury Research and Prevention Unit', 'Antarctic Institute of Canada', 'Ye Research Group · Stewart Blusson Quantum Matter Institute', 'University of British Columbia'];
+---
+<aside class="affiliations" aria-labelledby="affiliations-heading">
+  <div class="affiliations-header">
+    <div><p class="text-xs font-heading font-semibold uppercase tracking-[0.18em] text-neon-rose">Experience, research & education</p><h2 id="affiliations-heading" class="mt-2 text-lg font-heading font-semibold text-text-bright">Communities and organizations I’ve worked with</h2></div>
+    <button type="button" class="motion-control" aria-pressed="false" hidden>Pause scrolling</button>
+  </div>
+  <div class="affiliations-window"><div class="affiliations-track">
+    {[false, true].map((duplicate) => <div class="affiliations-set" aria-hidden={duplicate ? 'true' : undefined}>{names.map((name) => <OrganizationBadge name={name} />)}</div>)}
+  </div></div>
+</aside>
+<script>
+  document.querySelectorAll<HTMLElement>('.affiliations').forEach((panel) => {
+    const button = panel.querySelector<HTMLButtonElement>('.motion-control');
+    if (!button) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => { button.hidden = reduce.matches; };
+    sync(); reduce.addEventListener('change', sync);
+    button.addEventListener('click', () => {
+      const paused = panel.classList.toggle('is-paused');
+      button.setAttribute('aria-pressed', String(paused));
+      button.textContent = paused ? 'Resume scrolling' : 'Pause scrolling';
+    });
+  });
+</script>
+<style>
+  .affiliations { overflow: hidden; border: 1px solid rgb(36 26 20 / .1); border-radius: 1rem; background: rgb(255 255 255 / .72); padding: 1.25rem 0; }
+  .affiliations-header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; padding:0 1.25rem 1rem; }
+  .motion-control { color:#7f2f33; font-size:.8rem; font-weight:600; text-decoration:underline; text-underline-offset:3px; }
+  .affiliations-window { overflow:hidden; }
+  .affiliations-track { display:flex; width:max-content; animation: slide 48s linear infinite; }
+  .affiliations-set { display:flex; flex:none; align-items:stretch; gap:.625rem; padding-right:.625rem; }
+  .affiliations-set > :global(span) { white-space:nowrap; }
+  .is-paused .affiliations-track { animation-play-state:paused; }
+  @keyframes slide { to { transform:translateX(-50%); } }
+  @media (prefers-reduced-motion:reduce) { .affiliations-window { overflow:visible; } .affiliations-track { display:block; width:auto; animation:none; } .affiliations-set { flex-wrap:wrap; padding:0 1rem; } .affiliations-set[aria-hidden='true'] { display:none; } .affiliations-set > :global(span) { white-space:normal; } }
+</style>

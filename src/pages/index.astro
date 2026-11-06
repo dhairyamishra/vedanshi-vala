@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import OrganizationBadge from '../components/OrganizationBadge.astro';
+import AffiliationMarquee from '../components/AffiliationMarquee.astro';
 
 const outcomes = [
   { value: '40,000+', label: 'people reached', context: 'Safety resources, workshops, and community initiatives' },
@@ -71,6 +73,7 @@ const skills = [
           </div>
           <p class="mt-8 border-t border-black/10 pt-5 text-sm leading-relaxed text-muted">Currently pursuing a Master of Public Health at the Icahn School of Medicine at Mount Sinai.</p>
         </div>
+        <div class="space-y-5"><img src={`${import.meta.env.BASE_URL}images/vedanshi-vala.jpg`} alt="Vedanshi Vala" width="800" height="800" class="w-full max-h-[480px] rounded-2xl object-cover object-center shadow-neon-lg" />
         <aside class="rounded-2xl border border-black/10 bg-surface p-6 shadow-neon-lg md:p-8" aria-label="BOLT Safety Society impact">
           <p class="text-xs font-heading font-semibold uppercase tracking-[0.18em] text-neon-rose">BOLT Safety Society</p>
           <h2 class="mt-3 text-2xl font-heading font-semibold tracking-tight text-text-bright">Community impact, at a glance.</h2>
@@ -84,8 +87,9 @@ const skills = [
             ))}
           </dl>
           <a class="link-neon inline-block mt-2 text-sm font-medium" href="https://boltsafety.org" target="_blank" rel="noopener noreferrer">Visit BOLT Safety Society <span aria-hidden="true">↗</span></a>
-        </aside>
+        </aside></div>
       </div>
+      <div class="section-container relative z-10 mt-10"><AffiliationMarquee /></div>
     </section>
 
     <section id="impact" class="border-b border-black/5 bg-surface-light/40 py-14 md:py-16">
@@ -117,6 +121,7 @@ const skills = [
             <article class="grid gap-4 py-7 md:grid-cols-[160px_minmax(0,1fr)] md:gap-8">
               <p class="font-mono text-sm text-neon-rose">{item.date}</p>
               <div>
+                <div class="mb-3"><OrganizationBadge name={item.organization} /></div>
                 <h3 class="text-xl font-heading font-semibold text-text-bright">{item.organization}</h3>
                 <p class="mt-1 text-base font-medium text-text">{item.role}</p>
                 <p class="mt-2 text-xs text-muted">{item.location}</p>
@@ -135,6 +140,7 @@ const skills = [
         <div class="mt-8 grid gap-5 md:grid-cols-2">
           {research.map((item) => (
             <article class="card-neon">
+              <div class="mb-4"><OrganizationBadge name={item.organization} /></div>
               <p class="font-mono text-xs text-neon-rose">{item.date} · {item.role}</p>
               <h3 class="mt-3 text-lg font-heading font-semibold text-text-bright">{item.organization}</h3>
               <p class="mt-3 text-sm leading-7 text-muted">{item.detail}</p>
@@ -161,6 +167,7 @@ const skills = [
         <h2 class="section-heading">A foundation in science and global health.</h2>
         <div class="mt-8 grid gap-5 md:grid-cols-2">
           <article class="card-neon">
+            <div class="mb-4"><OrganizationBadge name="Icahn School of Medicine at Mount Sinai" /></div>
             <p class="badge-neon">In progress · Expected June 2027</p>
             <h3 class="mt-5 text-2xl font-heading font-semibold text-text-bright">Master of Public Health</h3>
             <p class="mt-2 font-medium text-text">Icahn School of Medicine at Mount Sinai</p>
@@ -168,6 +175,7 @@ const skills = [
             <p class="mt-4 font-mono text-xs text-muted">January 2026–June 2027 · New York, NY</p>
           </article>
           <article class="card-neon">
+            <div class="mb-4"><OrganizationBadge name="University of British Columbia" /></div>
             <p class="badge-neon">Graduated 2024</p>
             <h3 class="mt-5 text-2xl font-heading font-semibold text-text-bright">Bachelor of Science</h3>
             <p class="mt-2 font-medium text-text">University of British Columbia</p>
