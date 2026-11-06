@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  ogType?: 'website' | 'profile';
+}
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const {
+  title = 'Vedanshi Vala — Public Health Leader & Founder',
+  description = 'Vedanshi Vala is a public health leader and co-founder of BOLT Safety Society, advancing community safety, health equity, and gender-based violence prevention.',
+  ogImage = `${base}og.png`,
+  ogImageAlt = 'Vedanshi Vala — Public health. Community safety. Equity.',
+  ogType = 'profile',
+} = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const absoluteOgImage = new URL(ogImage, Astro.site).toString();
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Vedanshi Vala',
+  url: new URL(base, Astro.site).toString(),
+  jobTitle: 'Co-Founder and Executive Director',
+  worksFor: { '@type': 'Organization', name: 'BOLT Safety Society', url: 'https://boltsafety.org' },
+  alumniOf: [{ '@type': 'CollegeOrUniversity', name: 'University of British Columbia' }],
+  sameAs: ['https://www.linkedin.com/in/vedanshivala/'],
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#F8F4EE" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Vedanshi Vala" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    {ogType === 'profile' && <>
+      <meta property="profile:first_name" content="Vedanshi" />
+      <meta property="profile:last_name" content="Vala" />
+    </>}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteOgImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  </head>
+  <body class="font-body antialiased">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-surface focus:text-neon-rose focus:rounded-lg focus:border focus:border-neon-rose/40">Skip to content</a>
+    <slot />
+  </body>
+</html>
+<style is:global>
+  /* Keep the template's content visible even when JavaScript is unavailable. */
+  .reveal { opacity: 1; transform: none; }
+  :focus-visible { outline: 3px solid #A63A3D; outline-offset: 4px; }
+  section[id], main[id] { scroll-margin-top: 5.5rem; }
+</style>

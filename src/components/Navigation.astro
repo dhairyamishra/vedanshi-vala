@@ -1,0 +1,56 @@
+---
+import SocialLinks from './SocialLinks.astro';
+const navItems = [
+  { name: 'About', href: '#about' },
+  { name: 'Impact', href: '#impact' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Education', href: '#education' },
+  { name: 'Contact', href: '#contact' },
+];
+---
+<nav class="sticky top-0 z-50 bg-base/90 backdrop-blur-xl border-b border-black/5" id="main-nav" aria-label="Main navigation">
+  <div class="section-container">
+    <div class="flex justify-between items-center h-16 gap-6">
+      <a href="#about" aria-label="Vedanshi Vala, back to top" class="text-xl font-heading font-bold text-gradient-rose hover:opacity-80 transition-opacity">VV<span class="text-neon-rose">.</span></a>
+      <div class="hidden md:flex items-center gap-5 lg:gap-8">
+        {navItems.map((item) => <a href={item.href} class="py-1 text-sm font-medium tracking-wide text-muted hover:text-neon-rose">{item.name}</a>)}
+      </div>
+      <div class="hidden md:block"><SocialLinks variant="icon-only" /></div>
+      <button class="hidden md:hidden text-muted hover:text-neon-rose p-2" id="mobile-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg class="w-6 h-6 hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+        <svg class="w-6 h-6 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+  </div>
+  <div class="md:hidden" id="mobile-menu">
+    <div class="px-4 py-4 space-y-1 bg-base/95 backdrop-blur-xl border-t border-black/5">
+      {navItems.map((item) => <a href={item.href} class="block px-4 py-3 rounded-lg text-sm font-medium tracking-wide text-muted hover:text-neon-rose hover:bg-black/5">{item.name}</a>)}
+      <div class="divider-neon my-4"></div>
+      <div class="px-4 py-2"><SocialLinks variant="icon-only" containerClass="flex items-center space-x-6" /></div>
+    </div>
+  </div>
+</nav>
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const hamburger = btn?.querySelector('.hamburger-icon');
+  const closeIcon = btn?.querySelector('.close-icon');
+  function setMenu(open: boolean) {
+    menu?.classList.toggle('hidden', !open);
+    hamburger?.classList.toggle('hidden', open);
+    closeIcon?.classList.toggle('hidden', !open);
+    btn?.setAttribute('aria-expanded', String(open));
+    btn?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  btn?.classList.remove('hidden');
+  setMenu(false);
+  btn?.addEventListener('click', () => setMenu(btn.getAttribute('aria-expanded') !== 'true'));
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      btn.focus();
+    }
+  });
+  window.matchMedia('(min-width: 768px)').addEventListener('change', () => setMenu(false));
+</script>

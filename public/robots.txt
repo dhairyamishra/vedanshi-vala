@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dhairyamishra.github.io/vedanshi-vala/sitemap-index.xml
